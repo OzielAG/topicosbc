@@ -1,7 +1,22 @@
 import './App.css';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import {getContract} from "./contractConfig";
+//import {getContract} from "./contractConfig";
+
+// contractConfig.js
+
+import { ethers } from 'ethers';
+import TareaAbi from './artifacts/contracts/tarea.sol/tarea.json';
+
+const contractAddress = '0x8e104Eb00DF066E9Bcf5223fe5531fc87A740CdD';
+const contractABI = TareaAbi.abi;
+
+export const getContract = () => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(contractAddress, contractABI, signer);
+  return contract;
+};
 
 function App() {
   const [nombre, setNombre] = useState('');

@@ -36,6 +36,42 @@
       "artifacts": [
         "tarea"
       ]
+    },
+    "C:\\Users\\angel\\topicosbc\\contracts\\cpia.sol": {
+      "lastModificationDate": 1716575422223,
+      "contentHash": "af51255c318c3f6297bd62429d0c56a2",
+      "sourceName": "contracts/cpia.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.6.12 <0.9.0"
+      ],
+      "artifacts": [
+        "Tarea"
+      ]
     }
   }
 }

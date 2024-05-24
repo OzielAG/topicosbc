@@ -1,19 +1,12 @@
 import './App.css';
-import React from 'react';
-import { useState, useEffect } from 'react';
-//import {getContract} from "./contractConfig";
-
-// contractConfig.js
-
+import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import TareaAbi from './artifacts/contracts/tarea.sol/tarea.json';
+import TareaAbi from './artifacts/contracts/cpia.sol/Tarea.json';
 
-const contractAddress = '0x8e104Eb00DF066E9Bcf5223fe5531fc87A740CdD';
+const contractAddress = '0x538d2755b5fb9a4f7c5769bdcf5103e569d6e241';
 const contractABI = TareaAbi.abi;
 
-export const getContract = () => {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+export const getContract = (signer) => {
   const contract = new ethers.Contract(contractAddress, contractABI, signer);
   return contract;
 };
@@ -26,8 +19,27 @@ function App() {
   const [edad, setEdad] = useState(0);
   const [costo, setCosto] = useState(0);
   const [consulta, setConsulta] = useState('');
+  const [signer, setSigner] = useState(null);
 
-  const tareaContract = getContract();
+  useEffect(() => {
+    const init = async () => {
+      if (window.ethereum) {
+        try {
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const signer = provider.getSigner();
+          setSigner(signer);
+        } catch (error) {
+          console.error('Error connecting to MetaMask:', error);
+        }
+      } else {
+        console.error('MetaMask not detected');
+      }
+    };
+    init();
+  }, []);
+
+  const tareaContract = signer ? getContract(signer) : null;
 
   const handleChangeNombre = (event) => {
     setNombre(event.target.value);
@@ -53,7 +65,13 @@ function App() {
     setCosto(parseInt(event.target.value));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!tareaContract) {
+      console.error('Contract not initialized');
+      return;
+    }
+
     try {
       await tareaContract.setName(nombre);
       await tareaContract.setFecha(fecha);
@@ -103,6 +121,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;
